@@ -1,5 +1,7 @@
 package git.jd499.fmsquadbuilder;
 
+import org.apache.commons.csv.CSVRecord;
+
 public class Player {
     private final String name;
     private final int age;
@@ -59,82 +61,81 @@ public class Player {
     private final int vis;
     private final int wor;
     private final String contractExpires;
-    private final int salary;
+    private final String salary;
     private final String transferValue;
     private final String transferStatus;
-    private final int askingPrice;
-    private final int averageRating;
-    private final int maxAP;
-    private final int minWD;
-    private final int maxWD;
-    public Player(String csvLine) {
-        String[] data = csvLine.split(",");
-        this.name = data[0];
-        this.age = Integer.parseInt(data[1]);
-        this.nationality = data[2];
-        this.club = data[3];
-        this.position = data[4];
-        this.secondaryPosition = data[5];
-        this.mediaDescription = data[6];
-        this.personality = data[7];
-        this.height = data[8];
-        this.weight = data[9];
-        this.acc = Integer.parseInt(data[10]);
-        this.aer = Integer.parseInt(data[11]);
-        this.agg = Integer.parseInt(data[12]);
-        this.agi = Integer.parseInt(data[13]);
-        this.ant = Integer.parseInt(data[14]);
-        this.bal = Integer.parseInt(data[15]);
-        this.bra = Integer.parseInt(data[16]);
-        this.cmd = Integer.parseInt(data[17]);
-        this.com = Integer.parseInt(data[18]);
-        this.cmp = Integer.parseInt(data[19]);
-        this.cnt = Integer.parseInt(data[20]);
-        this.cor = Integer.parseInt(data[21]);
-        this.cro = Integer.parseInt(data[22]);
-        this.dec = Integer.parseInt(data[23]);
-        this.det = Integer.parseInt(data[24]);
-        this.dri = Integer.parseInt(data[25]);
-        this.ecc = Integer.parseInt(data[26]);
-        this.fin = Integer.parseInt(data[27]);
-        this.fir = Integer.parseInt(data[28]);
-        this.fla = Integer.parseInt(data[29]);
-        this.fre = Integer.parseInt(data[30]);
-        this.han = Integer.parseInt(data[31]);
-        this.hea = Integer.parseInt(data[32]);
-        this.jum = Integer.parseInt(data[33]);
-        this.kic = Integer.parseInt(data[34]);
-        this.ldr = Integer.parseInt(data[35]);
-        this.lon = Integer.parseInt(data[36]);
-        this.lth = Integer.parseInt(data[37]);
-        this.mar = Integer.parseInt(data[38]);
-        this.nat = Integer.parseInt(data[39]);
-        this.otb = Integer.parseInt(data[40]);
-        this.ovo = Integer.parseInt(data[41]);
-        this.pac = Integer.parseInt(data[42]);
-        this.pas = Integer.parseInt(data[43]);
-        this.pen = Integer.parseInt(data[44]);
-        this.pos = Integer.parseInt(data[45]);
-        this.pun = Integer.parseInt(data[46]);
-        this.ref = Integer.parseInt(data[47]);
-        this.tro = Integer.parseInt(data[48]);
-        this.sta = Integer.parseInt(data[49]);
-        this.str = Integer.parseInt(data[50]);
-        this.tck = Integer.parseInt(data[51]);
-        this.tea = Integer.parseInt(data[52]);
-        this.tec = Integer.parseInt(data[53]);
-        this.thr = Integer.parseInt(data[54]);
-        this.vis = Integer.parseInt(data[55]);
-        this.wor = Integer.parseInt(data[56]);
-        this.contractExpires = data[57];
-        this.salary = Integer.parseInt(data[58]);
-        this.transferValue = data[59];
-        this.transferStatus = data[60];
-        this.askingPrice = Integer.parseInt(data[61]);
-        this.averageRating = Integer.parseInt(data[62]);
-        this.maxAP = Integer.parseInt(data[63]);
-        this.minWD = Integer.parseInt(data[64]);
-        this.maxWD = Integer.parseInt(data[65]);
+    private final String askingPrice;
+    private final String averageRating;
+    private final String maxAP;
+    private final String minWD;
+    private final String maxWD;
+    public Player(CSVRecord record) {
+        this.name = record.get("Name");
+        this.age = Integer.parseInt(record.get("Age"));
+        this.nationality = record.get("Nat");
+        this.club = record.get("Club");
+        this.position = record.get("Position");
+        this.secondaryPosition = record.get("Sec. Position");
+        this.mediaDescription = record.get("Media Description");
+        this.personality = record.get("Personality");
+        this.height = record.get("Height");
+        this.weight = record.get("Weight");
+        this.acc = Integer.parseInt(record.get("Acc"));
+        this.aer = Integer.parseInt(record.get("Aer"));
+        this.agg = Integer.parseInt(record.get("Agg"));
+        this.agi = Integer.parseInt(record.get("Agi"));
+        this.ant = Integer.parseInt(record.get("Ant"));
+        this.bal = Integer.parseInt(record.get("Bal"));
+        this.bra = Integer.parseInt(record.get("Bra"));
+        this.cmd = Integer.parseInt(record.get("Cmd"));
+        this.com = Integer.parseInt(record.get("Com"));
+        this.cmp = Integer.parseInt(record.get("Cmp"));
+        this.cnt = Integer.parseInt(record.get("Cnt"));
+        this.cor = Integer.parseInt(record.get("Cor"));
+        this.cro = Integer.parseInt(record.get("Cro"));
+        this.dec = Integer.parseInt(record.get("Dec"));
+        this.det = Integer.parseInt(record.get("Det"));
+        this.dri = Integer.parseInt(record.get("Dri"));
+        this.ecc = Integer.parseInt(record.get("Ecc"));
+        this.fin = Integer.parseInt(record.get("Fin"));
+        this.fir = Integer.parseInt(record.get("Fir"));
+        this.fla = Integer.parseInt(record.get("Fla"));
+        this.fre = Integer.parseInt(record.get("Fre"));
+        this.han = Integer.parseInt(record.get("Han"));
+        this.hea = Integer.parseInt(record.get("Hea"));
+        this.jum = Integer.parseInt(record.get("Jum"));
+        this.kic = Integer.parseInt(record.get("Kic"));
+        this.ldr = Integer.parseInt(record.get("Ldr"));
+        this.lon = Integer.parseInt(record.get("Lon"));
+        this.lth = Integer.parseInt(record.get("L Th"));
+        this.mar = Integer.parseInt(record.get("Mar"));
+        this.nat = Integer.parseInt(record.get("Nat"));
+        this.otb = Integer.parseInt(record.get("OtB"));
+        this.ovo = Integer.parseInt(record.get("1v1"));
+        this.pac = Integer.parseInt(record.get("Pac"));
+        this.pas = Integer.parseInt(record.get("Pas"));
+        this.pen = Integer.parseInt(record.get("Pen"));
+        this.pos = Integer.parseInt(record.get("Pos"));
+        this.pun = Integer.parseInt(record.get("Pun"));
+        this.ref = Integer.parseInt(record.get("Ref"));
+        this.tro = Integer.parseInt(record.get("TRO"));
+        this.sta = Integer.parseInt(record.get("Sta"));
+        this.str = Integer.parseInt(record.get("Str"));
+        this.tck = Integer.parseInt(record.get("Tck"));
+        this.tea = Integer.parseInt(record.get("Tea"));;
+        this.tec = Integer.parseInt(record.get("Tec"));
+        this.thr = Integer.parseInt(record.get("Thr"));
+        this.vis = Integer.parseInt(record.get("Vis"));
+        this.wor = Integer.parseInt(record.get("Wor"));
+        this.contractExpires = record.get("Expires");
+        this.salary = record.get("Salary");
+        this.transferValue = record.get("Transfer Value");
+        this.transferStatus = record.get("Transfer Status");
+        this.askingPrice = record.get("Asking Price");
+        this.averageRating = record.get("Av Rat");
+        this.maxAP = record.get("Max AP");
+        this.minWD = record.get("Min WD");
+        this.maxWD = record.get("Max WD");
     }
 
     public String getName() {
@@ -369,7 +370,7 @@ public class Player {
         return contractExpires;
     }
 
-    public int getSalary() {
+    public String getSalary() {
         return salary;
     }
 
@@ -381,23 +382,23 @@ public class Player {
         return transferStatus;
     }
 
-    public int getAskingPrice() {
+    public String getAskingPrice() {
         return askingPrice;
     }
 
-    public int getAverageRating() {
+    public String getAverageRating() {
         return averageRating;
     }
 
-    public int getMaxAP() {
+    public String getMaxAP() {
         return maxAP;
     }
 
-    public int getMinWD() {
+    public String getMinWD() {
         return minWD;
     }
 
-    public int getMaxWD() {
+    public String getMaxWD() {
         return maxWD;
     }
 }

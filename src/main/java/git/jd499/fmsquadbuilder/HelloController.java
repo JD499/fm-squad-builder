@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class HelloController {
     @FXML
@@ -36,6 +37,15 @@ public class HelloController {
             try {
                 HtmlTableToCsv.convertHtmlTableToCsv(htmlFilePath, csvFilePath);
                 welcomeText.setText("File converted: " + csvFilePath);
+
+                List<Player> players = PlayerFactory.createPlayers("src/main/resources/Squad.csv");
+                for (Player player : players) {
+                    System.out.println("Player name: " + player.getName());
+                    System.out.println("Player age: " + player.getAge());
+                }
+
+
+
             } catch (IOException e) {
                 e.printStackTrace();
                 welcomeText.setText("Error converting file.");
