@@ -3,8 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
+
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="git.jd499.fmsquadbuilder.HelloController">
   <padding>
@@ -13,4 +13,5 @@
 
   <Label fx:id="welcomeText"/>
   <Button text="Hello!" onAction="#onHelloButtonClick"/>
+  <Button fx:id="fileChooserButton" text="Choose File" onAction="#onFileChooserButtonClick"/>
 </VBox>
