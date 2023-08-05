@@ -6,6 +6,7 @@ plugins {
   id 'org.beryx.jlink' version '2.25.0'
 }
 
+
 group 'git.jd499'
 version '1.0-SNAPSHOT'
 
@@ -38,6 +39,8 @@ dependencies {
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+  implementation 'org.jsoup:jsoup:1.16.1'
+  implementation 'org.apache.commons:commons-csv:1.10.0'
 }
 
 test {

@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import java.io.File;
+import java.io.IOException;
 
 public class HelloController {
     @FXML
@@ -28,6 +29,17 @@ public class HelloController {
 
         if (selectedFile != null) {
             welcomeText.setText("File selected: " + selectedFile.getName());
+
+            // Convert the HTML file to a CSV file
+            String htmlFilePath = selectedFile.getPath();
+            String csvFilePath = "src/main/resources/Squad.csv";
+            try {
+                HtmlTableToCsv.convertHtmlTableToCsv(htmlFilePath, csvFilePath);
+                welcomeText.setText("File converted: " + csvFilePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                welcomeText.setText("Error converting file.");
+            }
         } else {
             welcomeText.setText("File selection cancelled.");
         }
