@@ -18,18 +18,16 @@ public class HtmlTableToCsv {
         Document doc = Jsoup.parse(Files.newInputStream(Paths.get(htmlFilePath)), "UTF-8", "");
         Element table = doc.select("table").first();
 
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get(csvFilePath));
-        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader());
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(csvFilePath));
+             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader())) {
 
-        Elements header = table.select("tbody tr th");
-        csvPrinter.printRecord(header.eachText());
+            Elements header = table.select("tbody tr th");
+            csvPrinter.printRecord(header.eachText());
 
-        Elements rows = table.select("tbody tr");
-        for (Element row : rows) {
-            csvPrinter.printRecord(row.select("td").eachText());
+            Elements rows = table.select("tbody tr");
+            for (Element row : rows) {
+                csvPrinter.printRecord(row.select("td").eachText());
+            }
         }
-
-        csvPrinter.flush();
-        csvPrinter.close();
     }
 }

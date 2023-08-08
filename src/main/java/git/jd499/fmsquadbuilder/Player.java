@@ -69,6 +69,8 @@ public class Player {
     private final String maxAP;
     private final String minWD;
     private final String maxWD;
+
+
     public Player(CSVRecord record) {
         this.name = record.get("Name");
         this.age = Integer.parseInt(record.get("Age"));
@@ -122,7 +124,7 @@ public class Player {
         this.sta = Integer.parseInt(record.get("Sta"));
         this.str = Integer.parseInt(record.get("Str"));
         this.tck = Integer.parseInt(record.get("Tck"));
-        this.tea = Integer.parseInt(record.get("Tea"));;
+        this.tea = Integer.parseInt(record.get("Tea"));
         this.tec = Integer.parseInt(record.get("Tec"));
         this.thr = Integer.parseInt(record.get("Thr"));
         this.vis = Integer.parseInt(record.get("Vis"));
