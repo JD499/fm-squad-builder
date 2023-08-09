@@ -7,8 +7,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class HelloController {
     @FXML
@@ -63,14 +62,36 @@ public class HelloController {
         Optional<List<Player>> playersOpt = PlayerFactory.createPlayers(csvFilePath);
         if (playersOpt.isPresent()) {
             List<Player> players = playersOpt.get();
-            for (Player player : players) {
-                System.out.println("Player name: " + player.getName());
-                System.out.println("Player age: " + player.getAge());
-            }
+            printAdvancedForwardAbilities(players); // Call the new function here
         } else {
             System.out.println("Error reading players from CSV file.");
         }
     }
+
+    private void printAdvancedForwardAbilities(List<Player> players) {
+        PlayerAbilityCalculator abilityCalculator = new PlayerAbilityCalculator();
+
+        // Create a list of players with their abilities as advanced forwards
+        List<Map.Entry<Player, Double>> playerAbilities = new ArrayList<>();
+        for (Player player : players) {
+            double ability = abilityCalculator.calculateAdvancedForwardAbility(player);
+            playerAbilities.add(new AbstractMap.SimpleEntry<>(player, ability));
+        }
+
+        // Sort the list by ability in descending order
+        playerAbilities.sort((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()));
+
+        // Print the sorted players and their abilities
+        System.out.println("Advanced Forward Abilities:");
+        for (Map.Entry<Player, Double> entry : playerAbilities) {
+            Player player = entry.getKey();
+            double ability = entry.getValue();
+            System.out.println("Player name: " + player.getName() + ", Ability as Advanced Forward: " + ability);
+        }
+    }
+
+
+
 
 }
 
