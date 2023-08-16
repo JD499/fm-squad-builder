@@ -93,22 +93,57 @@ public class SquadBuilder extends Application {
         penaltyAreaBottom.setStroke(Color.WHITE);
         pane.getChildren().add(penaltyAreaBottom);
 
-        createPositionBox(pane, 100, 100); // Top-left
-        createPositionBox(pane, 300, 100); // Top-center
-        createPositionBox(pane, 500, 100); // Top-right
-        createPositionBox(pane, 100, 300); // Middle-left
-        createPositionBox(pane, 300, 300); // Middle-center
-        createPositionBox(pane, 500, 300); // Middle-right
-        createPositionBox(pane, 100, 500); // Bottom-left
-        createPositionBox(pane, 300, 500); // Bottom-center
-        createPositionBox(pane, 500, 500); // Bottom-right
+        // Strikers
+        createPositionCircle(pane, 300, 150);  // ST Center
+        createPositionCircle(pane, 250, 150);  // ST Left
+        createPositionCircle(pane, 350, 150);  // ST Right
 
+        // Attacking Midfielders
+        createPositionCircle(pane, 250, 250);  // AMC Left
+        createPositionCircle(pane, 300, 250);  // AMC Center
+        createPositionCircle(pane, 350, 250);  // AMC Right
 
+        // Wing Midfielders
+        createPositionCircle(pane, 150, 250);  // AML
+        createPositionCircle(pane, 450, 250);  // AMR
+        createPositionCircle(pane, 150, 350);  // WML
+        createPositionCircle(pane, 450, 350);  // WMR
 
+        // Central Midfielders
+        createPositionCircle(pane, 250, 350);  // CM Left
+        createPositionCircle(pane, 300, 350);  // CM Center
+        createPositionCircle(pane, 350, 350);  // CM Right
 
+        // Defensive Midfielders
+        createPositionCircle(pane, 250, 450);  // DM Left
+        createPositionCircle(pane, 300, 450);  // DM Center
+        createPositionCircle(pane, 350, 450);  // DM Right
 
+        // Wingbacks
+        createPositionCircle(pane, 150, 450);  // AWL
+        createPositionCircle(pane, 450, 450);  // AWR
+        createPositionCircle(pane, 150, 550);  // DWL
+        createPositionCircle(pane, 450, 550);  // DWR
+
+        // Defensive Centers
+        createPositionCircle(pane, 250, 550);  // DC Left
+        createPositionCircle(pane, 300, 550);  // DC Center
+        createPositionCircle(pane, 350, 550);  // DC Right
+
+        // Goalkeeper
+        createPositionCircle(pane, 300, 650);  // GK
 
     }
+
+    private void createPositionCircle(Pane pane, double x, double y) {
+        Circle positionCircle = new Circle(x, y, 15);  // 15 is the radius
+        positionCircle.setFill(Color.TRANSPARENT);
+        positionCircle.setStroke(Color.WHITE);
+        pane.getChildren().add(positionCircle);
+    }
+
+
+
 
     protected void onFileChooserButtonClick() {
         File selectedFile = selectFile();
