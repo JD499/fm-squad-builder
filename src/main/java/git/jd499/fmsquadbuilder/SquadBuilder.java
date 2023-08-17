@@ -3,10 +3,15 @@ package git.jd499.fmsquadbuilder;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -16,9 +21,18 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class SquadBuilder extends Application {
+    private List<Player> players;  // List of players loaded from the CSV or other data source
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) {
         VBox root = new VBox();
@@ -47,11 +61,6 @@ public class SquadBuilder extends Application {
         primaryStage.setTitle("Soccer Field");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     private void createSoccerField(Pane pane) {
@@ -94,55 +103,75 @@ public class SquadBuilder extends Application {
         pane.getChildren().add(penaltyAreaBottom);
 
         // Strikers
-        createPositionCircle(pane, 300, 150);  // ST Center
-        createPositionCircle(pane, 250, 150);  // ST Left
-        createPositionCircle(pane, 350, 150);  // ST Right
+        createPositionCircle(pane, 300, 150, List.of("ST (C)"));  // ST Center
+        createPositionCircle(pane, 250, 150, List.of("ST (C)"));  // ST Left
+        createPositionCircle(pane, 350, 150, List.of("ST (C)"));  // ST Right
 
         // Attacking Midfielders
-        createPositionCircle(pane, 250, 250);  // AMC Left
-        createPositionCircle(pane, 300, 250);  // AMC Center
-        createPositionCircle(pane, 350, 250);  // AMC Right
+        createPositionCircle(pane, 250, 250, Arrays.asList("AM (RLC)", "AM (LC)", "AM (RL)"));  // AMC Left
+        createPositionCircle(pane, 300, 250, Arrays.asList("AM (RLC)", "AM (LC)"));  // AMC Center
+        createPositionCircle(pane, 350, 250, Arrays.asList("AM (RLC)", "AM (LC)", "AM (RL)"));  // AMC Right
 
         // Wing Midfielders
-        createPositionCircle(pane, 150, 250);  // AML
-        createPositionCircle(pane, 450, 250);  // AMR
-        createPositionCircle(pane, 150, 350);  // WML
-        createPositionCircle(pane, 450, 350);  // WMR
+        createPositionCircle(pane, 150, 250, Arrays.asList("AM (RLC)", "AM (LC)", "AM (L)"));  // AML
+        createPositionCircle(pane, 450, 250, Arrays.asList("AM (RLC)", "AM (RC)", "AM (R)", "M/AM (R)"));  // AMR
+        createPositionCircle(pane, 150, 350, Arrays.asList("M (L)", "M/AM (L)"));  // WML
+        createPositionCircle(pane, 450, 350, Arrays.asList("M (R)", "M/AM (R)"));  // WMR
 
         // Central Midfielders
-        createPositionCircle(pane, 250, 350);  // CM Left
-        createPositionCircle(pane, 300, 350);  // CM Center
-        createPositionCircle(pane, 350, 350);  // CM Right
+        createPositionCircle(pane, 250, 350, Arrays.asList("M (C)", "M (RC)", "M (LC)", "M/AM"));  // CM Left
+        createPositionCircle(pane, 300, 350, Arrays.asList("M (C)", "M (RC)", "M (LC)", "M/AM"));  // CM Center
+        createPositionCircle(pane, 350, 350, Arrays.asList("M (C)", "M (RC)", "M (LC)", "M/AM"));  // CM Right
 
         // Defensive Midfielders
-        createPositionCircle(pane, 250, 450);  // DM Left
-        createPositionCircle(pane, 300, 450);  // DM Center
-        createPositionCircle(pane, 350, 450);  // DM Right
+        createPositionCircle(pane, 250, 450, List.of("DM"));  // DM Left
+        createPositionCircle(pane, 300, 450, List.of("DM"));  // DM Center
+        createPositionCircle(pane, 350, 450, List.of("DM"));  // DM Right
 
         // Wingbacks
-        createPositionCircle(pane, 150, 450);  // AWL
-        createPositionCircle(pane, 450, 450);  // AWR
-        createPositionCircle(pane, 150, 550);  // DWL
-        createPositionCircle(pane, 450, 550);  // DWR
+        createPositionCircle(pane, 150, 450, List.of("WB (L)"));  // AWL
+        createPositionCircle(pane, 450, 450, List.of("WB (R)"));  // AWR
+        createPositionCircle(pane, 150, 550, Arrays.asList("D (L)", "D (RL)", "D (RLC)"));  // DWL
+        createPositionCircle(pane, 450, 550, Arrays.asList("D (R)", "D (RL)", "D (RLC)"));  // DWR
 
         // Defensive Centers
-        createPositionCircle(pane, 250, 550);  // DC Left
-        createPositionCircle(pane, 300, 550);  // DC Center
-        createPositionCircle(pane, 350, 550);  // DC Right
+        createPositionCircle(pane, 250, 550, List.of("D (C)"));  // DC Left
+        createPositionCircle(pane, 300, 550, List.of("D (C)"));  // DC Center
+        createPositionCircle(pane, 350, 550, List.of("D (C)"));  // DC Right
 
         // Goalkeeper
-        createPositionCircle(pane, 300, 650);  // GK
+        createPositionCircle(pane, 300, 650, List.of("GK"));  // GK
 
     }
 
-    private void createPositionCircle(Pane pane, double x, double y) {
+    private void createPositionCircle(Pane pane, double x, double y, List<String> positions) {
         Circle positionCircle = new Circle(x, y, 15);  // 15 is the radius
         positionCircle.setFill(Color.TRANSPARENT);
         positionCircle.setStroke(Color.WHITE);
+        positionCircle.setOnMouseClicked(event -> onPositionClicked(event, positions));
         pane.getChildren().add(positionCircle);
     }
 
+    private void onPositionClicked(MouseEvent event, List<String> positions) {
+        List<Player> playersForPosition = players.stream()
+                .filter(player -> positions.contains(player.getPosition()) || positions.contains(player.getSecondaryPosition()))
+                .collect(Collectors.toList());
 
+        System.out.println("Checking for positions: " + positions);
+        System.out.println("Number of players found: " + playersForPosition.size());
+
+
+        displayPlayersForPosition(playersForPosition, String.join("/", positions));
+    }
+
+
+    private void displayPlayersForPosition(List<Player> playersForPosition, String position) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Players for " + position);
+        alert.setHeaderText(null);
+        alert.setContentText(playersForPosition.stream().map(Player::getName).collect(Collectors.joining(", ")));
+        alert.showAndWait();
+    }
 
 
     protected void onFileChooserButtonClick() {
@@ -150,9 +179,13 @@ public class SquadBuilder extends Application {
         if (selectedFile != null) {
             String csvFilePath = "src/main/resources/Squad.csv";
             if (convertHtmlToCsv(selectedFile.getPath(), csvFilePath)) {
+                PlayerFactory playerFactory = new PlayerFactory();
+                players = PlayerFactory.createPlayers(csvFilePath).orElseThrow(() -> new RuntimeException("Could not create players"));
 
             }
         } else {
+
+            System.out.println("No file selected");
 
         }
     }
