@@ -154,12 +154,19 @@ public class SquadBuilder extends Application {
 
     private void onPositionClicked(MouseEvent event, List<String> positions) {
         List<Player> playersForPosition = players.stream()
-                .filter(player -> positions.contains(player.getPosition()) || positions.contains(player.getSecondaryPosition()))
+                .filter(player -> {
+                    String[] playerPositions = player.getBasicInfo().getPosition().split(",\\s*");
+                    for (String pos : playerPositions) {
+                        if (positions.contains(pos) || positions.contains(player.getBasicInfo().getSecondaryPosition())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
                 .collect(Collectors.toList());
 
         System.out.println("Checking for positions: " + positions);
         System.out.println("Number of players found: " + playersForPosition.size());
-
 
         displayPlayersForPosition(playersForPosition, String.join("/", positions));
     }
@@ -169,7 +176,10 @@ public class SquadBuilder extends Application {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Players for " + position);
         alert.setHeaderText(null);
-        alert.setContentText(playersForPosition.stream().map(Player::getName).collect(Collectors.joining(", ")));
+        alert.setContentText(playersForPosition.stream()
+                .map(player -> player.getBasicInfo().getName())
+                .collect(Collectors.joining(", ")));
+
         alert.showAndWait();
     }
 

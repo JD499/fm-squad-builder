@@ -133,135 +133,135 @@ public class PlayerAbilityCalculator {
 
     public double calculateAdvancedForwardAbility(Player player) {
         double ability = 0;
-        ability += player.getDri() * ADVANCED_FORWARD_WEIGHTS.get("dri");
-        ability += player.getFin() * ADVANCED_FORWARD_WEIGHTS.get("fin");
-        ability += player.getPas() * ADVANCED_FORWARD_WEIGHTS.get("pas");
-        ability += player.getTec() * ADVANCED_FORWARD_WEIGHTS.get("tec");
-        ability += player.getFir() * ADVANCED_FORWARD_WEIGHTS.get("fir");
-        ability += player.getAnt() * ADVANCED_FORWARD_WEIGHTS.get("ant");
-        ability += player.getDec() * ADVANCED_FORWARD_WEIGHTS.get("dec");
-        ability += player.getOtb() * ADVANCED_FORWARD_WEIGHTS.get("otb");
-        ability += player.getWor() * ADVANCED_FORWARD_WEIGHTS.get("wor");
-        ability += player.getCmp() * ADVANCED_FORWARD_WEIGHTS.get("cmp");
-        ability += player.getAcc() * ADVANCED_FORWARD_WEIGHTS.get("acc");
-        ability += player.getAgi() * ADVANCED_FORWARD_WEIGHTS.get("agi");
-        ability += player.getBal() * ADVANCED_FORWARD_WEIGHTS.get("bal");
-        ability += player.getPac() * ADVANCED_FORWARD_WEIGHTS.get("pac");
-        ability += player.getSta() * ADVANCED_FORWARD_WEIGHTS.get("sta");
+        ability += player.getAttributes().getDri() * ADVANCED_FORWARD_WEIGHTS.get("dri");
+        ability += player.getAttributes().getFin() * ADVANCED_FORWARD_WEIGHTS.get("fin");
+        ability += player.getAttributes().getPas() * ADVANCED_FORWARD_WEIGHTS.get("pas");
+        ability += player.getAttributes().getTec() * ADVANCED_FORWARD_WEIGHTS.get("tec");
+        ability += player.getAttributes().getFir() * ADVANCED_FORWARD_WEIGHTS.get("fir");
+        ability += player.getAttributes().getAnt() * ADVANCED_FORWARD_WEIGHTS.get("ant");
+        ability += player.getAttributes().getDec() * ADVANCED_FORWARD_WEIGHTS.get("dec");
+        ability += player.getAttributes().getOtb() * ADVANCED_FORWARD_WEIGHTS.get("otb");
+        ability += player.getAttributes().getWor() * ADVANCED_FORWARD_WEIGHTS.get("wor");
+        ability += player.getAttributes().getCmp() * ADVANCED_FORWARD_WEIGHTS.get("cmp");
+        ability += player.getAttributes().getAcc() * ADVANCED_FORWARD_WEIGHTS.get("acc");
+        ability += player.getAttributes().getAgi() * ADVANCED_FORWARD_WEIGHTS.get("agi");
+        ability += player.getAttributes().getBal() * ADVANCED_FORWARD_WEIGHTS.get("bal");
+        ability += player.getAttributes().getPac() * ADVANCED_FORWARD_WEIGHTS.get("pac");
+        ability += player.getAttributes().getSta() * ADVANCED_FORWARD_WEIGHTS.get("sta");
 
         return ability;
     }
 
     public double calculateDefensiveWingerSupportAbility(Player player) {
         double ability = 0;
-        ability += player.getCro() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cro");
-        ability += player.getDri() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("dri");
-        ability += player.getFir() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("fir");
-        ability += player.getMar() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("mar");
-        ability += player.getPas() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("pas");
-        ability += player.getTck() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tck");
-        ability += player.getTec() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tec");
-        ability += player.getAgg() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("agg");
-        ability += player.getAnt() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("ant");
-        ability += player.getCmp() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cmp");
-        ability += player.getCnt() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cnt");
-        ability += player.getDec() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("dec");
-        ability += player.getOtb() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("otb");
-        ability += player.getPos() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("pos");
-        ability += player.getTea() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tea");
-        ability += player.getWor() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("wor");
-        ability += player.getAcc() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("acc");
-        ability += player.getSta() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("sta");
+        ability += player.getAttributes().getCro() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cro");
+        ability += player.getAttributes().getDri() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("dri");
+        ability += player.getAttributes().getFir() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("fir");
+        ability += player.getAttributes().getMar() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("mar");
+        ability += player.getAttributes().getPas() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("pas");
+        ability += player.getAttributes().getTck() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tck");
+        ability += player.getAttributes().getTec() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tec");
+        ability += player.getAttributes().getAgg() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("agg");
+        ability += player.getAttributes().getAnt() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("ant");
+        ability += player.getAttributes().getCmp() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cmp");
+        ability += player.getAttributes().getCnt() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cnt");
+        ability += player.getAttributes().getDec() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("dec");
+        ability += player.getAttributes().getOtb() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("otb");
+        ability += player.getAttributes().getPos() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("pos");
+        ability += player.getAttributes().getTea() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tea");
+        ability += player.getAttributes().getWor() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("wor");
+        ability += player.getAttributes().getAcc() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("acc");
+        ability += player.getAttributes().getSta() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("sta");
 
         return ability;
     }
 
     public double calculateCentralMidfielderSupportAbility(Player player) {
         double ability = 0;
-        ability += player.getFir() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("fir");
-        ability += player.getPas() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("pas");
-        ability += player.getTck() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tck");
-        ability += player.getTec() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tec");
-        ability += player.getAnt() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("ant");
-        ability += player.getCmp() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("cmp");
-        ability += player.getCnt() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("cnt");
-        ability += player.getDec() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("dec");
-        ability += player.getOtb() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("otb");
-        ability += player.getTea() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tea");
-        ability += player.getVis() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("vis");
-        ability += player.getWor() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("wor");
-        ability += player.getSta() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("sta");
+        ability += player.getAttributes().getFir() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("fir");
+        ability += player.getAttributes().getPas() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("pas");
+        ability += player.getAttributes().getTck() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tck");
+        ability += player.getAttributes().getTec() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tec");
+        ability += player.getAttributes().getAnt() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("ant");
+        ability += player.getAttributes().getCmp() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("cmp");
+        ability += player.getAttributes().getCnt() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("cnt");
+        ability += player.getAttributes().getDec() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("dec");
+        ability += player.getAttributes().getOtb() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("otb");
+        ability += player.getAttributes().getTea() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tea");
+        ability += player.getAttributes().getVis() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("vis");
+        ability += player.getAttributes().getWor() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("wor");
+        ability += player.getAttributes().getSta() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("sta");
 
         return ability;
     }
 
     public double calculateInvertedWingbackSupportAbility(Player player) {
         double ability = 0;
-        ability += player.getDri() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("dri");
-        ability += player.getFir() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("fir");
-        ability += player.getMar() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("mar");
-        ability += player.getPas() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("pas");
-        ability += player.getTck() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tck");
-        ability += player.getTec() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tec");
-        ability += player.getAnt() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("ant");
-        ability += player.getCmp() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("cmp");
-        ability += player.getCnt() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("cnt");
-        ability += player.getDec() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("dec");
-        ability += player.getOtb() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("otb");
-        ability += player.getPos() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("pos");
-        ability += player.getTea() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tea");
-        ability += player.getWor() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("wor");
-        ability += player.getAcc() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("acc");
-        ability += player.getAgi() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("agi");
-        ability += player.getSta() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("sta");
+        ability += player.getAttributes().getDri() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("dri");
+        ability += player.getAttributes().getFir() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("fir");
+        ability += player.getAttributes().getMar() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("mar");
+        ability += player.getAttributes().getPas() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("pas");
+        ability += player.getAttributes().getTck() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tck");
+        ability += player.getAttributes().getTec() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tec");
+        ability += player.getAttributes().getAnt() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("ant");
+        ability += player.getAttributes().getCmp() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("cmp");
+        ability += player.getAttributes().getCnt() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("cnt");
+        ability += player.getAttributes().getDec() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("dec");
+        ability += player.getAttributes().getOtb() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("otb");
+        ability += player.getAttributes().getPos() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("pos");
+        ability += player.getAttributes().getTea() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tea");
+        ability += player.getAttributes().getWor() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("wor");
+        ability += player.getAttributes().getAcc() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("acc");
+        ability += player.getAttributes().getAgi() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("agi");
+        ability += player.getAttributes().getSta() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("sta");
 
         return ability;
     }
 
     public double calculateBallPlayingDefenderDefendAbility(Player player) {
         double ability = 0;
-        ability += player.getFir() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("fir");
-        ability += player.getHea() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("hea");
-        ability += player.getMar() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("mar");
-        ability += player.getPas() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pas");
-        ability += player.getTck() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("tck");
-        ability += player.getTec() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("tec");
-        ability += player.getAgg() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("agg");
-        ability += player.getAnt() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("ant");
-        ability += player.getBra() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("bra");
-        ability += player.getCmp() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("cmp");
-        ability += player.getCnt() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("cnt");
-        ability += player.getDec() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("dec");
-        ability += player.getPos() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pos");
-        ability += player.getVis() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("vis");
-        ability += player.getJum() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("jum");
-        ability += player.getPac() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pac");
-        ability += player.getStr() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("str");
+        ability += player.getAttributes().getFir() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("fir");
+        ability += player.getAttributes().getHea() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("hea");
+        ability += player.getAttributes().getMar() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("mar");
+        ability += player.getAttributes().getPas() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pas");
+        ability += player.getAttributes().getTck() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("tck");
+        ability += player.getAttributes().getTec() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("tec");
+        ability += player.getAttributes().getAgg() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("agg");
+        ability += player.getAttributes().getAnt() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("ant");
+        ability += player.getAttributes().getBra() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("bra");
+        ability += player.getAttributes().getCmp() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("cmp");
+        ability += player.getAttributes().getCnt() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("cnt");
+        ability += player.getAttributes().getDec() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("dec");
+        ability += player.getAttributes().getPos() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pos");
+        ability += player.getAttributes().getVis() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("vis");
+        ability += player.getAttributes().getJum() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("jum");
+        ability += player.getAttributes().getPac() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pac");
+        ability += player.getAttributes().getStr() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("str");
 
         return ability;
     }
 
     public double calculateSweeperKeeperDefendAbility(Player player) {
         double ability = 0;
-        ability += player.getAer() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("aer");
-        ability += player.getCmd() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cmd");
-        ability += player.getCom() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("com");
-        ability += player.getFir() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("fir");
-        ability += player.getHan() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("han");
-        ability += player.getKic() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("kic");
-        ability += player.getOvo() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ovo");
-        ability += player.getPas() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("pas");
-        ability += player.getRef() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ref");
-        ability += player.getTro() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("tro");
-        ability += player.getThr() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("thr");
-        ability += player.getAnt() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ant");
-        ability += player.getCmp() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cmp");
-        ability += player.getCnt() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cnt");
-        ability += player.getDec() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("dec");
-        ability += player.getPos() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("pos");
-        ability += player.getVis() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("vis");
-        ability += player.getAcc() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("acc");
-        ability += player.getAgi() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("agi");
+        ability += player.getAttributes().getAer() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("aer");
+        ability += player.getAttributes().getCmd() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cmd");
+        ability += player.getAttributes().getCom() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("com");
+        ability += player.getAttributes().getFir() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("fir");
+        ability += player.getAttributes().getHan() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("han");
+        ability += player.getAttributes().getKic() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("kic");
+        ability += player.getAttributes().getOvo() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ovo");
+        ability += player.getAttributes().getPas() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("pas");
+        ability += player.getAttributes().getRef() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ref");
+        ability += player.getAttributes().getTro() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("tro");
+        ability += player.getAttributes().getThr() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("thr");
+        ability += player.getAttributes().getAnt() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ant");
+        ability += player.getAttributes().getCmp() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cmp");
+        ability += player.getAttributes().getCnt() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cnt");
+        ability += player.getAttributes().getDec() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("dec");
+        ability += player.getAttributes().getPos() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("pos");
+        ability += player.getAttributes().getVis() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("vis");
+        ability += player.getAttributes().getAcc() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("acc");
+        ability += player.getAttributes().getAgi() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("agi");
 
         return ability;
     }
