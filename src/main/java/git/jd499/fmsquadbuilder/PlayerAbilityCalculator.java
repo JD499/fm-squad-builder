@@ -4,266 +4,1976 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerAbilityCalculator {
+  private static final Map<PlayerRole, Map<String, Double>> WEIGHTS = new HashMap<>();
 
+  static {
+    WEIGHTS.put(
+        PlayerRole.DEEP_LYING_FORWARD_SUPPORT,
+        new HashMap<>() {
+          {
+            put("fin", 0.1);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("bal", 0.1);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.DEEP_LYING_FORWARD_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fin", 0.1);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("bal", 0.1);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.ADVANCED_FORWARD_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.2);
+            put("pas", 0.1);
+            put("tec", 0.2);
+            put("fir", 0.2);
+            put("ant", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("wor", 0.1);
+            put("cmp", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.TARGET_FORWARD_SUPPORT,
+        new HashMap<>() {
+          {
+            put("fin", 0.1);
+            put("fir", 0.1);
+            put("hea", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("bra", 0.2);
+            put("cmp", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.1);
+            put("tea", 0.2);
+            put("bal", 0.2);
+            put("jmp", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.TARGET_FORWARD_ATTACK,
+        new HashMap<>() {
+          {
+            put("fin", 0.2);
+            put("fir", 0.1);
+            put("hea", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("bra", 0.2);
+            put("cmp", 0.2);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.1);
+            put("bal", 0.2);
+            put("jmp", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.POACHER_ATTACK,
+        new HashMap<>() {
+          {
+            put("fin", 0.2);
+            put("fir", 0.1);
+            put("hea", 0.1);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.2);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("acc", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.COMPLETE_FORWARD_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.1);
+            put("fir", 0.2);
+            put("hea", 0.2);
+            put("lon", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.2);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("otb", 0.2);
+            put("tea", 0.1);
+            put("vis", 0.2);
+            put("wor", 0.1);
+            put("acc", 0.2);
+            put("agi", 0.2);
+            put("bal", 0.1);
+            put("jmp", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.1);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.COMPLETE_FORWARD_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.2);
+            put("fir", 0.2);
+            put("hea", 0.2);
+            put("lon", 0.1);
+            put("pas", 0.1);
+            put("tec", 0.2);
+            put("ant", 0.2);
+            put("cmp", 0.2);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.1);
+            put("vis", 0.1);
+            put("wor", 0.1);
+            put("acc", 0.2);
+            put("agi", 0.2);
+            put("bal", 0.1);
+            put("jmp", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.1);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.PRESSING_FORWARD_DEFEND,
+        new HashMap<>() {
+          {
+            put("fir", 0.1);
+            put("agg", 0.2);
+            put("ant", 0.2);
+            put("bra", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.PRESSING_FORWARD_SUPPORT,
+        new HashMap<>() {
+          {
+            put("fir", 0.1);
+            put("pas", 0.1);
+            put("agg", 0.2);
+            put("ant", 0.2);
+            put("bra", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.PRESSING_FORWARD_ATTACK,
+        new HashMap<>() {
+          {
+            put("fin", 0.1);
+            put("fir", 0.1);
+            put("agg", 0.2);
+            put("ant", 0.2);
+            put("bra", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.TREQUARTISTA_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.1);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.2);
+            put("otb", 0.2);
+            put("vis", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.FALSE_NINE_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.1);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.1);
+            put("vis", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.2);
+            put("bal", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.ATTACKING_MIDFIELDER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.2);
+            put("lon", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("dec", 0.2);
+            put("fla", 0.2);
+            put("otb", 0.2);
+            put("vis", 0.1);
+            put("agi", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.ATTACKING_MIDFIELDER_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.1);
+            put("fir", 0.2);
+            put("lon", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("dec", 0.2);
+            put("fla", 0.2);
+            put("otb", 0.2);
+            put("vis", 0.1);
+            put("agi", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.ADVANCED_PLAYMAKER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("agi", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.ADVANCED_PLAYMAKER_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("acc", 0.1);
+            put("agi", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.ENGANCHE_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.1);
+            put("tea", 0.1);
+            put("vis", 0.2);
+            put("agi", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.SHADOW_STRIKER_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.2);
+            put("fir", 0.2);
+            put("pas", 0.1);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.2);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("wor", 0.1);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WINGER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("fir", 0.1);
+            put("pas", 0.1);
+            put("tec", 0.2);
+            put("otb", 0.2);
+            put("wor", 0.1);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WINGER_ATTACK,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("fir", 0.1);
+            put("pas", 0.1);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.INSIDE_FORWARD_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.1);
+            put("fir", 0.2);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("vis", 0.1);
+            put("acc", 0.2);
+            put("agi", 0.2);
+            put("bal", 0.2);
+            put("pac", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.INSIDE_FORWARD_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.2);
+            put("fir", 0.2);
+            put("lon", 0.1);
+            put("pas", 0.1);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.2);
+            put("bal", 0.2);
+            put("pac", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_TARGET_FORWARD_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("fir", 0.1);
+            put("hea", 0.2);
+            put("ant", 0.1);
+            put("bra", 0.2);
+            put("otb", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.1);
+            put("bal", 0.1);
+            put("jmp", 0.2);
+            put("sta", 0.1);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_TARGET_FORWARD_ATTACK,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("fin", 0.1);
+            put("fir", 0.1);
+            put("hea", 0.2);
+            put("ant", 0.1);
+            put("bra", 0.2);
+            put("otb", 0.2);
+            put("tea", 0.1);
+            put("wor", 0.1);
+            put("bal", 0.1);
+            put("jmp", 0.2);
+            put("sta", 0.1);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.RAMDEUTER_ATTACK,
+        new HashMap<>() {
+          {
+            put("fin", 0.2);
+            put("fir", 0.1);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.2);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("otb", 0.2);
+            put("wor", 0.1);
+            put("acc", 0.1);
+            put("bal", 0.2);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.INVERTED_WINGER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("dri", 0.2);
+            put("fir", 0.1);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("cmp", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.1);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.INVERTED_WINGER_ATTACK,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("dri", 0.2);
+            put("fir", 0.1);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("dec", 0.1);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("vis", 0.1);
+            put("acc", 0.2);
+            put("agi", 0.2);
+            put("pac", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.CENTRAL_MIDFIELDER_DEFEND,
+        new HashMap<>() {
+          {
+            put("fir", 0.1);
+            put("mar", 0.1);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.CENTRAL_MIDFIELDER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.CENTRAL_MIDFIELDER_ATTACK,
+        new HashMap<>() {
+          {
+            put("fir", 0.2);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.1);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.2);
+            put("tea", 0.1);
+            put("vis", 0.1);
+            put("wor", 0.1);
+            put("acc", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.CENTRAL_MIDFIELDER_AUTOMATIC,
+        new HashMap<>() {
+          {
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.DEEP_LYING_PLAYMAKER_DEFEND,
+        new HashMap<>() {
+          {
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.1);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("bal", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.DEEP_LYING_PLAYMAKER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("fir", 0.2);
+            put("pas", 0.2);
 
-    private static final Map<String, Double> ADVANCED_FORWARD_WEIGHTS = new HashMap<>();
-    private static final Map<String, Double> DEFENSIVE_WINGER_SUPPORT_WEIGHTS = new HashMap<>();
-    private static final Map<String, Double> CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS = new HashMap<>();
-    private static final Map<String, Double> INVERTED_WINGBACK_SUPPORT_WEIGHTS = new HashMap<>();
-    private static final Map<String, Double> BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS = new HashMap<>();
-    private static final Map<String, Double> SWEEPER_KEEPER_DEFEND_WEIGHTS = new HashMap<>();
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("bal", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.BOX_TO_BOX_MIDFIELDER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fin", 0.1);
+            put("fir", 0.1);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.BALL_WINNING_MIDFIELDER_DEFEND,
+        new HashMap<>() {
+          {
+            put("mar", 0.1);
+            put("tck", 0.2);
+            put("agg", 0.2);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cnt", 0.1);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.BALL_WINNING_MIDFIELDER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("mar", 0.1);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("agg", 0.2);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cnt", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.ROAMING_PLAYMAKER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.2);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.2);
+            put("cmp", 0.2);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.MEZZALA_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.1);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.1);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("bal", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.MEZZALA_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fin", 0.1);
+            put("fir", 0.1);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("vis", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("bal", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.CARRILERO_SUPPORT,
+        new HashMap<>() {
+          {
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.DEFENSIVE_MIDFIELDER_DEFEND,
+        new HashMap<>() {
+          {
+            put("mar", 0.1);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.1);
+            put("sta", 0.1);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.DEFENSIVE_MIDFIELDER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("fir", 0.1);
+            put("mar", 0.1);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.1);
+            put("sta", 0.1);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.ANCHOR_DEFEND,
+        new HashMap<>() {
+          {
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("pos", 0.2);
+            put("tea", 0.1);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.HALF_BACK_DEFEND,
+        new HashMap<>() {
+          {
+            put("fir", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cmp", 0.2);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.1);
+            put("jmp", 0.1);
+            put("sta", 0.1);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.REGISTA_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.2);
+            put("lon", 0.1);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.2);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("bal", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.SEGUNDO_VOLANTE_SUPPORT,
+        new HashMap<>() {
+          {
+            put("fin", 0.1);
+            put("fir", 0.1);
+            put("lon", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.SEGUNDO_VOLANTE_ATTACK,
+        new HashMap<>() {
+          {
+            put("fin", 0.2);
+            put("fir", 0.1);
+            put("lon", 0.2);
+            put("mar", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_MIDFIELDER_DEFEND,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("fir", 0.1);
+            put("mar", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_MIDFIELDER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("fir", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.2);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_MIDFIELDER_ATTACK,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.1);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.2);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_MIDFIELDER_AUTOMATIC,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("fir", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("vis", 0.1);
+            put("wor", 0.2);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.DEFENSIVE_WINGER_DEFEND,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("dri", 0.1);
+            put("fir", 0.1);
+            put("mar", 0.1);
+            put("tck", 0.1);
+            put("tec", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.2);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.3);
+            put("acc", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.DEFENSIVE_WINGER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.1);
+            put("fir", 0.1);
+            put("mar", 0.1);
+            put("pas", 0.1);
+            put("tck", 0.1);
+            put("tec", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.3);
+            put("acc", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_PLAYMAKER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("agi", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_PLAYMAKER_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("acc", 0.1);
+            put("agi", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.CENTRAL_DEFENDER_DEFEND,
+        new HashMap<>() {
+          {
+            put("hea", 0.2);
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("bra", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("jmp", 0.2);
+            put("pac", 0.1);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.CENTRAL_DEFENDER_STOPPER,
+        new HashMap<>() {
+          {
+            put("hea", 0.2);
+            put("mar", 0.1);
+            put("tck", 0.2);
+            put("agg", 0.2);
+            put("ant", 0.1);
+            put("bra", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("pos", 0.2);
+            put("jmp", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.CENTRAL_DEFENDER_COVER,
+        new HashMap<>() {
+          {
+            put("hea", 0.1);
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("pos", 0.2);
+            put("jmp", 0.1);
+            put("pac", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.LIBERO_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.2);
+            put("hea", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cmp", 0.2);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("jmp", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.1);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.LIBERO_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fir", 0.2);
+            put("hea", 0.1);
+            put("lon", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cmp", 0.2);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("fla", 0.2);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("vis", 0.2);
+            put("acc", 0.1);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("jmp", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.1);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.BALL_PLAYING_DEFENDER_DEFEND,
+        new HashMap<>() {
+          {
+            put("fir", 0.1);
+            put("hea", 0.2);
+            put("mar", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("bra", 0.1);
+            put("cmp", 0.2);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("vis", 0.1);
+            put("jum", 0.2);
+            put("pac", 0.1);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.BALL_PLAYING_DEFENDER_STOPPER,
+        new HashMap<>() {
+          {
+            put("fir", 0.1);
+            put("hea", 0.2);
+            put("mar", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("agg", 0.2);
+            put("ant", 0.1);
+            put("bra", 0.2);
+            put("cmp", 0.2);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("pos", 0.2);
+            put("vis", 0.1);
+            put("jum", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.BALL_PLAYING_DEFENDER_COVER,
+        new HashMap<>() {
+          {
+            put("fir", 0.1);
+            put("hea", 0.1);
+            put("mar", 0.1);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cmp", 0.2);
+            put("cnt", 0.2);
+            put("dec", 0.2);
+            put("pos", 0.2);
+            put("vis", 0.1);
+            put("jum", 0.1);
+            put("pac", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.NO_NONSENSE_CENTER_BACK_DEFEND,
+        new HashMap<>() {
+          {
+            put("hea", 0.2);
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("bra", 0.1);
+            put("cnt", 0.1);
+            put("pos", 0.2);
+            put("jmp", 0.2);
+            put("pac", 0.1);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.NO_NONSENSE_CENTER_BACK_STOPPER,
+        new HashMap<>() {
+          {
+            put("hea", 0.2);
+            put("mar", 0.1);
+            put("tck", 0.2);
+            put("agg", 0.2);
+            put("ant", 0.1);
+            put("bra", 0.2);
+            put("cnt", 0.1);
+            put("pos", 0.2);
+            put("jmp", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.NO_NONSENSE_CENTER_BACK_COVER,
+        new HashMap<>() {
+          {
+            put("hea", 0.1);
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cnt", 0.2);
+            put("pos", 0.2);
+            put("jmp", 0.1);
+            put("pac", 0.2);
+            put("str", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_CENTER_BACK_DEFEND,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.1);
+            put("hea", 0.2);
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("bra", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("wor", 0.1);
+            put("jmp", 0.2);
+            put("pac", 0.1);
+            put("sta", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_CENTER_BACK_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("hea", 0.2);
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("bra", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.1);
+            put("pos", 0.2);
+            put("wor", 0.1);
+            put("jmp", 0.2);
+            put("pac", 0.2);
+            put("sta", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WIDE_CENTER_BACK_ATTACK,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("hea", 0.2);
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.1);
+            put("bra", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("wor", 0.1);
+            put("jmp", 0.2);
+            put("pac", 0.2);
+            put("sta", 0.2);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.FULL_BACK_DEFEND,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.FULL_BACK_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("dri", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("pac", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.FULL_BACK_ATTACK,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.1);
+            put("fir", 0.1);
+            put("mar", 0.1);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.1);
+            put("agi", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.FULL_BACK_AUTOMATIC,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("dri", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("pac", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WING_BACK_DEFEND,
+        new HashMap<>() {
+          {
+            put("cro", 0.1);
+            put("dri", 0.1);
+            put("fir", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WING_BACK_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("fir", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WING_BACK_ATTACK,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("fir", 0.1);
+            put("mar", 0.1);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.WING_BACK_AUTOMATIC,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("fir", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.1);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.NO_NONSENSE_FULL_BACK_DEFEND,
+        new HashMap<>() {
+          {
+            put("hea", 0.1);
+            put("mar", 0.2);
+            put("tck", 0.2);
+            put("agg", 0.1);
+            put("ant", 0.2);
+            put("bra", 0.1);
+            put("cnt", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.1);
+            put("str", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.COMPLETE_WING_BACK_SUPPORT,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.1);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.COMPLETE_WING_BACK_ATTACK,
+        new HashMap<>() {
+          {
+            put("cro", 0.2);
+            put("dri", 0.2);
+            put("fir", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.1);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("dec", 0.2);
+            put("fla", 0.2);
+            put("otb", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("bal", 0.1);
+            put("pac", 0.2);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.INVERTED_WING_BACK_DEFEND,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.2);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.1);
+            put("pos", 0.2);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.1);
+            put("agi", 0.1);
+            put("sta", 0.1);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.INVERTED_WING_BACK_SUPPORT,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.1);
+            put("agi", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.INVERTED_WING_BACK_ATTACK,
+        new HashMap<>() {
+          {
+            put("dri", 0.2);
+            put("fir", 0.1);
+            put("lon", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.2);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("fla", 0.1);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.2);
+            put("agi", 0.1);
+            put("pac", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.INVERTED_WING_BACK_AUTOMATIC,
+        new HashMap<>() {
+          {
+            put("dri", 0.1);
+            put("fir", 0.1);
+            put("mar", 0.2);
+            put("pas", 0.2);
+            put("tck", 0.2);
+            put("tec", 0.1);
+            put("ant", 0.1);
+            put("cmp", 0.1);
+            put("cnt", 0.1);
+            put("dec", 0.2);
+            put("otb", 0.2);
+            put("pos", 0.1);
+            put("tea", 0.2);
+            put("wor", 0.2);
+            put("acc", 0.1);
+            put("agi", 0.1);
+            put("sta", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.GOALKEEPER_DEFEND,
+        new HashMap<>() {
+          {
+            put("aer", 0.2);
+            put("cmd", 0.2);
+            put("com", 0.2);
+            put("han", 0.2);
+            put("kic", 0.2);
+            put("ovo", 0.1);
+            put("ref", 0.2);
+            put("thr", 0.1);
+            put("ant", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("agi", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.SWEEPER_KEEPER_DEFEND,
+        new HashMap<>() {
+          {
+            put("aer", 0.1);
+            put("cmd", 0.2);
+            put("com", 0.1);
+            put("fir", 0.1);
+            put("han", 0.1);
+            put("kic", 0.2);
+            put("ovo", 0.2);
+            put("pas", 0.1);
+            put("ref", 0.2);
+            put("tro", 0.1);
+            put("thr", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.1);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("vis", 0.1);
+            put("acc", 0.1);
+            put("agi", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.SWEEPER_KEEPER_SUPPORT,
+        new HashMap<>() {
+          {
+            put("aer", 0.1);
+            put("cmd", 0.2);
+            put("com", 0.1);
+            put("fir", 0.1);
+            put("han", 0.1);
+            put("kic", 0.2);
+            put("ovo", 0.2);
+            put("pas", 0.1);
+            put("ref", 0.2);
+            put("tro", 0.2);
+            put("thr", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.2);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("vis", 0.1);
+            put("acc", 0.1);
+            put("agi", 0.2);
+          }
+        });
+    WEIGHTS.put(
+        PlayerRole.SWEEPER_KEEPER_ATTACK,
+        new HashMap<>() {
+          {
+            put("aer", 0.1);
+            put("cmd", 0.2);
+            put("com", 0.1);
+            put("ecc", 0.1);
+            put("fir", 0.1);
+            put("han", 0.1);
+            put("kic", 0.2);
+            put("ovo", 0.2);
+            put("pas", 0.1);
+            put("ref", 0.2);
+            put("tro", 0.2);
+            put("thr", 0.1);
+            put("ant", 0.2);
+            put("cmp", 0.2);
+            put("cnt", 0.2);
+            put("dec", 0.1);
+            put("pos", 0.2);
+            put("vis", 0.1);
+            put("acc", 0.1);
+            put("agi", 0.2);
+          }
+        });
+  }
 
-    static {
-        ADVANCED_FORWARD_WEIGHTS.put("dri", 0.2);
-        ADVANCED_FORWARD_WEIGHTS.put("fin", 0.2);
-        ADVANCED_FORWARD_WEIGHTS.put("pas", 0.1);
-        ADVANCED_FORWARD_WEIGHTS.put("tec", 0.2);
-        ADVANCED_FORWARD_WEIGHTS.put("fir", 0.2);
-        ADVANCED_FORWARD_WEIGHTS.put("ant", 0.1);
-        ADVANCED_FORWARD_WEIGHTS.put("dec", 0.1);
-        ADVANCED_FORWARD_WEIGHTS.put("otb", 0.2);
-        ADVANCED_FORWARD_WEIGHTS.put("wor", 0.1);
-        ADVANCED_FORWARD_WEIGHTS.put("cmp", 0.2);
-        ADVANCED_FORWARD_WEIGHTS.put("acc", 0.2);
-        ADVANCED_FORWARD_WEIGHTS.put("agi", 0.1);
-        ADVANCED_FORWARD_WEIGHTS.put("bal", 0.1);
-        ADVANCED_FORWARD_WEIGHTS.put("pac", 0.1);
-        ADVANCED_FORWARD_WEIGHTS.put("sta", 0.1);
-
+  public double calculateAbility(Player player, PlayerRole role) {
+    double ability = 0;
+    Map<String, Double> weights = WEIGHTS.get(role);
+    for (String attribute : weights.keySet()) {
+      ability += player.getAttributes().getAttribute(attribute) * weights.get(attribute);
     }
+    return ability;
+  }
 
-    static {
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("cro", 0.2);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("dri", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("fir", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("mar", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("pas", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("tck", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("tec", 0.2);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("agg", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("ant", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("cmp", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("cnt", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("dec", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("otb", 0.2);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("pos", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("tea", 0.2);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("wor", 0.3);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("acc", 0.1);
-        DEFENSIVE_WINGER_SUPPORT_WEIGHTS.put("sta", 0.2);
-    }
-
-    static {
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("fir", 0.2);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("pas", 0.2);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("tck", 0.2);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("tec", 0.1);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("ant", 0.1);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("cmp", 0.1);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("cnt", 0.1);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("dec", 0.2);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("otb", 0.1);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("tea", 0.2);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("vis", 0.1);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("wor", 0.1);
-        CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.put("sta", 0.1);
-    }
-
-    static {
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("dri", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("fir", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("mar", 0.2);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("pas", 0.2);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("tck", 0.2);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("tec", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("ant", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("cmp", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("cnt", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("dec", 0.2);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("otb", 0.2);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("pos", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("tea", 0.2);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("wor", 0.2);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("acc", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("agi", 0.1);
-        INVERTED_WINGBACK_SUPPORT_WEIGHTS.put("sta", 0.2);
-    }
-
-    static {
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("fir", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("hea", 0.2);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("mar", 0.2);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("pas", 0.2);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("tck", 0.2);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("tec", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("agg", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("ant", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("bra", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("cmp", 0.2);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("cnt", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("dec", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("pos", 0.2);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("vis", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("jum", 0.2);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("pac", 0.1);
-        BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.put("str", 0.2);
-    }
-
-    static {
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("aer", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("cmd", 0.2);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("com", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("fir", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("han", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("kic", 0.2);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("ovo", 0.2);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("pas", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("ref", 0.2);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("tro", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("thr", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("ant", 0.2);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("cmp", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("cnt", 0.2);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("dec", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("pos", 0.2);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("vis", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("acc", 0.1);
-        SWEEPER_KEEPER_DEFEND_WEIGHTS.put("agi", 0.2);
-    }
-
-    public double calculateAdvancedForwardAbility(Player player) {
-        double ability = 0;
-        ability += player.getAttributes().getDri() * ADVANCED_FORWARD_WEIGHTS.get("dri");
-        ability += player.getAttributes().getFin() * ADVANCED_FORWARD_WEIGHTS.get("fin");
-        ability += player.getAttributes().getPas() * ADVANCED_FORWARD_WEIGHTS.get("pas");
-        ability += player.getAttributes().getTec() * ADVANCED_FORWARD_WEIGHTS.get("tec");
-        ability += player.getAttributes().getFir() * ADVANCED_FORWARD_WEIGHTS.get("fir");
-        ability += player.getAttributes().getAnt() * ADVANCED_FORWARD_WEIGHTS.get("ant");
-        ability += player.getAttributes().getDec() * ADVANCED_FORWARD_WEIGHTS.get("dec");
-        ability += player.getAttributes().getOtb() * ADVANCED_FORWARD_WEIGHTS.get("otb");
-        ability += player.getAttributes().getWor() * ADVANCED_FORWARD_WEIGHTS.get("wor");
-        ability += player.getAttributes().getCmp() * ADVANCED_FORWARD_WEIGHTS.get("cmp");
-        ability += player.getAttributes().getAcc() * ADVANCED_FORWARD_WEIGHTS.get("acc");
-        ability += player.getAttributes().getAgi() * ADVANCED_FORWARD_WEIGHTS.get("agi");
-        ability += player.getAttributes().getBal() * ADVANCED_FORWARD_WEIGHTS.get("bal");
-        ability += player.getAttributes().getPac() * ADVANCED_FORWARD_WEIGHTS.get("pac");
-        ability += player.getAttributes().getSta() * ADVANCED_FORWARD_WEIGHTS.get("sta");
-
-        return ability;
-    }
-
-    public double calculateDefensiveWingerSupportAbility(Player player) {
-        double ability = 0;
-        ability += player.getAttributes().getCro() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cro");
-        ability += player.getAttributes().getDri() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("dri");
-        ability += player.getAttributes().getFir() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("fir");
-        ability += player.getAttributes().getMar() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("mar");
-        ability += player.getAttributes().getPas() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("pas");
-        ability += player.getAttributes().getTck() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tck");
-        ability += player.getAttributes().getTec() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tec");
-        ability += player.getAttributes().getAgg() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("agg");
-        ability += player.getAttributes().getAnt() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("ant");
-        ability += player.getAttributes().getCmp() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cmp");
-        ability += player.getAttributes().getCnt() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("cnt");
-        ability += player.getAttributes().getDec() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("dec");
-        ability += player.getAttributes().getOtb() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("otb");
-        ability += player.getAttributes().getPos() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("pos");
-        ability += player.getAttributes().getTea() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("tea");
-        ability += player.getAttributes().getWor() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("wor");
-        ability += player.getAttributes().getAcc() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("acc");
-        ability += player.getAttributes().getSta() * DEFENSIVE_WINGER_SUPPORT_WEIGHTS.get("sta");
-
-        return ability;
-    }
-
-    public double calculateCentralMidfielderSupportAbility(Player player) {
-        double ability = 0;
-        ability += player.getAttributes().getFir() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("fir");
-        ability += player.getAttributes().getPas() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("pas");
-        ability += player.getAttributes().getTck() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tck");
-        ability += player.getAttributes().getTec() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tec");
-        ability += player.getAttributes().getAnt() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("ant");
-        ability += player.getAttributes().getCmp() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("cmp");
-        ability += player.getAttributes().getCnt() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("cnt");
-        ability += player.getAttributes().getDec() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("dec");
-        ability += player.getAttributes().getOtb() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("otb");
-        ability += player.getAttributes().getTea() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("tea");
-        ability += player.getAttributes().getVis() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("vis");
-        ability += player.getAttributes().getWor() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("wor");
-        ability += player.getAttributes().getSta() * CENTRAL_MIDFIELDER_SUPPORT_WEIGHTS.get("sta");
-
-        return ability;
-    }
-
-    public double calculateInvertedWingbackSupportAbility(Player player) {
-        double ability = 0;
-        ability += player.getAttributes().getDri() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("dri");
-        ability += player.getAttributes().getFir() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("fir");
-        ability += player.getAttributes().getMar() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("mar");
-        ability += player.getAttributes().getPas() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("pas");
-        ability += player.getAttributes().getTck() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tck");
-        ability += player.getAttributes().getTec() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tec");
-        ability += player.getAttributes().getAnt() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("ant");
-        ability += player.getAttributes().getCmp() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("cmp");
-        ability += player.getAttributes().getCnt() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("cnt");
-        ability += player.getAttributes().getDec() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("dec");
-        ability += player.getAttributes().getOtb() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("otb");
-        ability += player.getAttributes().getPos() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("pos");
-        ability += player.getAttributes().getTea() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("tea");
-        ability += player.getAttributes().getWor() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("wor");
-        ability += player.getAttributes().getAcc() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("acc");
-        ability += player.getAttributes().getAgi() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("agi");
-        ability += player.getAttributes().getSta() * INVERTED_WINGBACK_SUPPORT_WEIGHTS.get("sta");
-
-        return ability;
-    }
-
-    public double calculateBallPlayingDefenderDefendAbility(Player player) {
-        double ability = 0;
-        ability += player.getAttributes().getFir() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("fir");
-        ability += player.getAttributes().getHea() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("hea");
-        ability += player.getAttributes().getMar() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("mar");
-        ability += player.getAttributes().getPas() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pas");
-        ability += player.getAttributes().getTck() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("tck");
-        ability += player.getAttributes().getTec() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("tec");
-        ability += player.getAttributes().getAgg() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("agg");
-        ability += player.getAttributes().getAnt() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("ant");
-        ability += player.getAttributes().getBra() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("bra");
-        ability += player.getAttributes().getCmp() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("cmp");
-        ability += player.getAttributes().getCnt() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("cnt");
-        ability += player.getAttributes().getDec() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("dec");
-        ability += player.getAttributes().getPos() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pos");
-        ability += player.getAttributes().getVis() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("vis");
-        ability += player.getAttributes().getJum() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("jum");
-        ability += player.getAttributes().getPac() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("pac");
-        ability += player.getAttributes().getStr() * BALL_PLAYING_DEFENDER_DEFEND_WEIGHTS.get("str");
-
-        return ability;
-    }
-
-    public double calculateSweeperKeeperDefendAbility(Player player) {
-        double ability = 0;
-        ability += player.getAttributes().getAer() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("aer");
-        ability += player.getAttributes().getCmd() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cmd");
-        ability += player.getAttributes().getCom() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("com");
-        ability += player.getAttributes().getFir() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("fir");
-        ability += player.getAttributes().getHan() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("han");
-        ability += player.getAttributes().getKic() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("kic");
-        ability += player.getAttributes().getOvo() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ovo");
-        ability += player.getAttributes().getPas() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("pas");
-        ability += player.getAttributes().getRef() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ref");
-        ability += player.getAttributes().getTro() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("tro");
-        ability += player.getAttributes().getThr() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("thr");
-        ability += player.getAttributes().getAnt() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("ant");
-        ability += player.getAttributes().getCmp() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cmp");
-        ability += player.getAttributes().getCnt() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("cnt");
-        ability += player.getAttributes().getDec() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("dec");
-        ability += player.getAttributes().getPos() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("pos");
-        ability += player.getAttributes().getVis() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("vis");
-        ability += player.getAttributes().getAcc() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("acc");
-        ability += player.getAttributes().getAgi() * SWEEPER_KEEPER_DEFEND_WEIGHTS.get("agi");
-
-        return ability;
-    }
+  public enum PlayerRole {
+    DEEP_LYING_FORWARD_SUPPORT,
+    DEEP_LYING_FORWARD_ATTACK,
+    ADVANCED_FORWARD_ATTACK,
+    TARGET_FORWARD_SUPPORT,
+    TARGET_FORWARD_ATTACK,
+    POACHER_ATTACK,
+    COMPLETE_FORWARD_SUPPORT,
+    COMPLETE_FORWARD_ATTACK,
+    PRESSING_FORWARD_DEFEND,
+    PRESSING_FORWARD_SUPPORT,
+    PRESSING_FORWARD_ATTACK,
+    TREQUARTISTA_ATTACK,
+    FALSE_NINE_SUPPORT,
+    ATTACKING_MIDFIELDER_SUPPORT,
+    ATTACKING_MIDFIELDER_ATTACK,
+    ADVANCED_PLAYMAKER_SUPPORT,
+    ADVANCED_PLAYMAKER_ATTACK,
+    ENGANCHE_SUPPORT,
+    SHADOW_STRIKER_ATTACK,
+    WINGER_SUPPORT,
+    WINGER_ATTACK,
+    INSIDE_FORWARD_SUPPORT,
+    INSIDE_FORWARD_ATTACK,
+    WIDE_TARGET_FORWARD_SUPPORT,
+    WIDE_TARGET_FORWARD_ATTACK,
+    RAMDEUTER_ATTACK,
+    INVERTED_WINGER_SUPPORT,
+    INVERTED_WINGER_ATTACK,
+    CENTRAL_MIDFIELDER_DEFEND,
+    CENTRAL_MIDFIELDER_SUPPORT,
+    CENTRAL_MIDFIELDER_ATTACK,
+    CENTRAL_MIDFIELDER_AUTOMATIC,
+    DEEP_LYING_PLAYMAKER_DEFEND,
+    DEEP_LYING_PLAYMAKER_SUPPORT,
+    BOX_TO_BOX_MIDFIELDER_SUPPORT,
+    BALL_WINNING_MIDFIELDER_DEFEND,
+    BALL_WINNING_MIDFIELDER_SUPPORT,
+    ROAMING_PLAYMAKER_SUPPORT,
+    MEZZALA_SUPPORT,
+    MEZZALA_ATTACK,
+    CARRILERO_SUPPORT,
+    DEFENSIVE_MIDFIELDER_DEFEND,
+    DEFENSIVE_MIDFIELDER_SUPPORT,
+    ANCHOR_DEFEND,
+    HALF_BACK_DEFEND,
+    REGISTA_SUPPORT,
+    SEGUNDO_VOLANTE_SUPPORT,
+    SEGUNDO_VOLANTE_ATTACK,
+    WIDE_MIDFIELDER_DEFEND,
+    WIDE_MIDFIELDER_SUPPORT,
+    WIDE_MIDFIELDER_ATTACK,
+    WIDE_MIDFIELDER_AUTOMATIC,
+    DEFENSIVE_WINGER_DEFEND,
+    DEFENSIVE_WINGER_SUPPORT,
+    WIDE_PLAYMAKER_SUPPORT,
+    WIDE_PLAYMAKER_ATTACK,
+    CENTRAL_DEFENDER_DEFEND,
+    CENTRAL_DEFENDER_STOPPER,
+    CENTRAL_DEFENDER_COVER,
+    LIBERO_SUPPORT,
+    LIBERO_ATTACK,
+    BALL_PLAYING_DEFENDER_DEFEND,
+    BALL_PLAYING_DEFENDER_STOPPER,
+    BALL_PLAYING_DEFENDER_COVER,
+    NO_NONSENSE_CENTER_BACK_DEFEND,
+    NO_NONSENSE_CENTER_BACK_STOPPER,
+    NO_NONSENSE_CENTER_BACK_COVER,
+    WIDE_CENTER_BACK_DEFEND,
+    WIDE_CENTER_BACK_SUPPORT,
+    WIDE_CENTER_BACK_ATTACK,
+    FULL_BACK_DEFEND,
+    FULL_BACK_SUPPORT,
+    FULL_BACK_ATTACK,
+    FULL_BACK_AUTOMATIC,
+    WING_BACK_DEFEND,
+    WING_BACK_SUPPORT,
+    WING_BACK_ATTACK,
+    WING_BACK_AUTOMATIC,
+    NO_NONSENSE_FULL_BACK_DEFEND,
+    COMPLETE_WING_BACK_SUPPORT,
+    COMPLETE_WING_BACK_ATTACK,
+    INVERTED_WING_BACK_DEFEND,
+    INVERTED_WING_BACK_SUPPORT,
+    INVERTED_WING_BACK_ATTACK,
+    INVERTED_WING_BACK_AUTOMATIC,
+    GOALKEEPER_DEFEND,
+    SWEEPER_KEEPER_DEFEND,
+    SWEEPER_KEEPER_SUPPORT,
+    SWEEPER_KEEPER_ATTACK,
+  }
 }
-
