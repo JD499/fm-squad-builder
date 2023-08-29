@@ -1,6 +1,6 @@
-module git.jd499.fmsquadbuilder {
+module git.jd.fmsquadbuilder {
     requires javafx.controls;
-    requires javafx.fxml;
+    requires javafx.base;
     requires org.apache.commons.csv;
     requires org.jsoup;
 

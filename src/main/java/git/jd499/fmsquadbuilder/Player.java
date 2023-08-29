@@ -6,7 +6,6 @@ public class Player {
 
   private final PlayerBasicInfo basicInfo;
   private final PlayerAttributes attributes;
-  private final PlayerContractInfo contractInfo;
 
   public Player(CSVRecord record) {
 
@@ -80,7 +79,7 @@ public class Player {
             Integer.parseInt(record.get("Vis")),
             Integer.parseInt(record.get("Wor")));
 
-    this.contractInfo = new PlayerContractInfo(record.get("Expires"), record.get("Salary"));
+    PlayerContractInfo contractInfo = new PlayerContractInfo(record.get("Expires"), record.get("Salary"));
   }
 
   public PlayerBasicInfo getBasicInfo() {
@@ -91,7 +90,4 @@ public class Player {
     return attributes;
   }
 
-  public PlayerContractInfo getContractInfo() {
-    return contractInfo;
-  }
 }

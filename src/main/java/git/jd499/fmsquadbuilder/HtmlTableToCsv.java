@@ -21,12 +21,23 @@ public class HtmlTableToCsv {
     try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(csvFilePath));
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader())) {
 
-      Elements header = table.select("tbody tr th");
-      csvPrinter.printRecord(header.eachText());
+      Elements header = null;
+      if (table != null) {
+        header = table.select("tbody tr th");
+      }
 
-      Elements rows = table.select("tbody tr");
-      for (Element row : rows) {
-        csvPrinter.printRecord(row.select("td").eachText());
+      if (header != null) {
+        csvPrinter.printRecord(header.eachText());
+      }
+
+      Elements rows = null;
+      if (table != null) {
+        rows = table.select("tbody tr");
+      }
+      if (rows != null) {
+        for (Element row : rows) {
+          csvPrinter.printRecord(row.select("td").eachText());
+        }
       }
     }
   }
