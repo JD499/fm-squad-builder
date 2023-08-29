@@ -131,14 +131,7 @@ public class SquadBuilder extends Application {
 
 
 
-  private void positionButtonInPane(Button button, Pane pane) {
-    button.layoutXProperty().bind(pane.widthProperty().subtract(button.widthProperty()).divide(2));
-    button.layoutYProperty().bind(pane.heightProperty().subtract(button.heightProperty()).divide(2));
-  }
 
-  private void addButtonToPane(Button button, Pane pane) {
-    pane.getChildren().add(button);
-  }
 
 
   private Pane createPaneWithBackground() {
