@@ -187,14 +187,14 @@ public class SquadBuilder extends Application {
             List.of("ST (C)"), List.of("ST (C)"), List.of("ST (C)"),  // Strikers
             Arrays.asList("AM (RLC)", "AM (LC)", "AM (RC)"), Arrays.asList("AM (RLC)", "AM (LC)", "AM (RC)"), Arrays.asList("AM (RLC)", "AM (LC)", "AM (RC)"),  // Attacking Midfielders
             Arrays.asList("AM (RLC)", "AM (LC)", "AM (L)", "M/AM (L)"),  // Wing Midfielders (AML)
-            Arrays.asList("M (L)", "M/AM (L)"),  // Central Midfielders (WML)
             Arrays.asList("AM (RLC)", "AM (RC)", "AM (R)", "M/AM (R)"),  // Wing Midfielders (AMR)
+            Arrays.asList("M (L)", "M/AM (L)"),  // Central Midfielders (WML)
             Arrays.asList("M (R)", "M/AM (R)"),  // Central Midfielders (WMR)
             Arrays.asList("M (C)", "M (RC)", "M (LC)", "M/AM"), Arrays.asList("M (C)", "M (RC)", "M (LC)", "M/AM"), Arrays.asList("M (C)", "M (RC)", "M (LC)", "M/AM"),  // Central Midfielders (CM)
             List.of("DM"), List.of("DM"), List.of("DM"),  // Defensive Midfielders
             List.of("WB (L)"),  // Wingback left
-            Arrays.asList("D (L)", "D (RL)", "D (RLC)"),  // Wingbacks (DWL)
             List.of("WB (R)"),  // Wingback right
+            Arrays.asList("D (L)", "D (RL)", "D (RLC)"),  // Wingbacks (DWL)
             Arrays.asList("D (R)", "D (RL)", "D (RLC)"),  // Wingbacks (DWR)
             List.of("D (C)"), List.of("D (C)"), List.of("D (C)"),  // Defensive Centers
             List.of("GK")  // Goalkeeper
