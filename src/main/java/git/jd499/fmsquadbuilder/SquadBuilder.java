@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -44,9 +45,9 @@ public class SquadBuilder extends Application {
     put("D (R)",Arrays.asList("FULL_BACK_DEFEND", "FULL_BACK_SUPPORT", "FULL_BACK_ATTACK", "FULL_BACK_AUTOMATIC","WING_BACK_DEFEND", "WING_BACK_SUPPORT", "WING_BACK_ATTACK", "WING_BACK_AUTOMATIC", "NO_NONSENSE_FULL_BACK_DEFEND", "INVERTED_WING_BACK_DEFEND", "INVERTED_WING_BACK_SUPPORT", "INVERTED_WING_BACK_ATTACK", "INVERTED_WING_BACK_AUTOMATIC"));
     put("GK",Arrays.asList("GOALKEEPER_DEFEND", "SWEEPER_KEEPER_DEFEND", "SWEEPER_KEEPER_SUPPORT", "SWEEPER_KEEPER_ATTACK"));
   }};
+  private final PlayerAbilityCalculator abilityCalculator = new PlayerAbilityCalculator();
   List<Label> playerLabels = new ArrayList<>();
   List<ComboBox<String>> comboBoxes = new ArrayList<>();
-  private final PlayerAbilityCalculator abilityCalculator = new PlayerAbilityCalculator();
   private int blueCirclesCount = 0;
   private int playerCircleCount = 0;
   private List<Player> players; // List of players loaded from the CSV or other data source
@@ -55,21 +56,32 @@ public class SquadBuilder extends Application {
     launch(args);
   }
 
+
+
   @Override
   public void start(Stage primaryStage) {
-
-    GridPane root = new GridPane();
-
-    root.setPadding(new Insets(10, 10, 10, 10));
-    root.setHgap(10);
-    root.setVgap(10);
-    root.setStyle("-fx-background-color: " + DARK_COLOR + ";");
-
+    GridPane root = initializeGridPane();
     configureButtonArea(root);
     configureSoccerFieldArea(root);
     configureSelectionArea(root);
     configurePlayerListArea(root);
 
+    setColumnConstraints(root);
+    setRowConstraints(root);
+
+    initializeScene(primaryStage, root);
+  }
+
+  private GridPane initializeGridPane() {
+    GridPane root = new GridPane();
+    root.setPadding(new Insets(10, 10, 10, 10));
+    root.setHgap(10);
+    root.setVgap(10);
+    root.setStyle("-fx-background-color: " + DARK_COLOR + ";");
+    return root;
+  }
+
+  private void setColumnConstraints(GridPane root) {
     ColumnConstraints col1Constraints = new ColumnConstraints();
     col1Constraints.setPercentWidth(20);
 
@@ -79,35 +91,55 @@ public class SquadBuilder extends Application {
     ColumnConstraints col3Constraints = new ColumnConstraints();
     col3Constraints.setPercentWidth(20);
 
+    root.getColumnConstraints().addAll(col1Constraints, col2Constraints, col3Constraints);
+  }
+
+  private void setRowConstraints(GridPane root) {
     RowConstraints row1Constraints = new RowConstraints();
     row1Constraints.setPercentHeight(20);
+
     RowConstraints row2Constraints = new RowConstraints();
     row2Constraints.setPercentHeight(80);
 
     root.getRowConstraints().addAll(row1Constraints, row2Constraints);
+  }
 
-    root.getColumnConstraints().addAll(col1Constraints, col2Constraints, col3Constraints);
-    root.getRowConstraints().addAll(row1Constraints, row2Constraints);
-
+  private void initializeScene(Stage primaryStage, GridPane root) {
     Scene scene = new Scene(root, 920, 750);
-
     primaryStage.setScene(scene);
-    primaryStage.setTitle("Soccer Field Example");
+    primaryStage.setTitle("FM Squad Builder");
     primaryStage.show();
   }
+
 
   private void configureButtonArea(GridPane root) {
     Pane area1 = createPaneWithBackground();
     Button myButton = createStyledButton(event -> onFileChooserButtonClick());
-    myButton
-            .layoutXProperty()
-            .bind(area1.widthProperty().subtract(myButton.widthProperty()).divide(2));
-    myButton
-            .layoutYProperty()
-            .bind(area1.heightProperty().subtract(myButton.heightProperty()).divide(2));
+    centerNodeInPane(myButton, area1);
     area1.getChildren().add(myButton);
     root.add(area1, 0, 0);
   }
+
+
+
+  private void centerNodeInPane(Node node, Pane pane) {
+    if (node instanceof Region region) {
+      region.layoutXProperty().bind(pane.widthProperty().subtract(region.widthProperty()).divide(2));
+      region.layoutYProperty().bind(pane.heightProperty().subtract(region.heightProperty()).divide(2));
+    }
+  }
+
+
+
+  private void positionButtonInPane(Button button, Pane pane) {
+    button.layoutXProperty().bind(pane.widthProperty().subtract(button.widthProperty()).divide(2));
+    button.layoutYProperty().bind(pane.heightProperty().subtract(button.heightProperty()).divide(2));
+  }
+
+  private void addButtonToPane(Button button, Pane pane) {
+    pane.getChildren().add(button);
+  }
+
 
   private Pane createPaneWithBackground() {
     Pane pane = new Pane();
@@ -259,18 +291,19 @@ public class SquadBuilder extends Application {
     for (int i = 0; i < playerCirclePositions.length; i++) {
       double[] position = playerCirclePositions[i];
       Circle player = createPlayerCircle();
-      player
-              .centerXProperty()
-              .bind(boundary.widthProperty().multiply(position[0]).add(boundary.xProperty()));
-      player
-              .centerYProperty()
-              .bind(boundary.heightProperty().multiply(position[1]).add(boundary.yProperty()));
+      bindCircleToPosition(player, position);
       pane.getChildren().add(player);
 
       // Adjust the roles in the map
       circleToPositionMap.put(player, playerPositions.get(i));
     }
   }
+
+  private void bindCircleToPosition(Circle player, double[] position) {
+    player.centerXProperty().bind(boundary.widthProperty().multiply(position[0]).add(boundary.xProperty()));
+    player.centerYProperty().bind(boundary.heightProperty().multiply(position[1]).add(boundary.yProperty()));
+  }
+
 
   private Circle createPlayerCircle() {
     Circle circle = new Circle();
@@ -306,7 +339,7 @@ public class SquadBuilder extends Application {
   private void configurePlayerListArea(GridPane root) {
     Pane area4 = createPaneWithBackground();
     addPlayerLabelsToArea4(area4);
-    List<String> testNames =
+    List<String> DefaultPlayerPositions =
             Arrays.asList(
                     "Position 1",
                     "Position 2",
@@ -320,7 +353,7 @@ public class SquadBuilder extends Application {
                     "Position 10",
                     "Position 11");
 
-    updatePlayerLabels(testNames);
+    updatePlayerLabels(DefaultPlayerPositions);
 
     root.add(area4, 0, 1, 1, 4);
   }
