@@ -7,4 +7,6 @@ module git.jd.fmsquadbuilder {
 
     opens git.jd499.fmsquadbuilder to javafx.fxml;
     exports git.jd499.fmsquadbuilder;
+    exports git.jd499.fmsquadbuilder.domain;
+    opens git.jd499.fmsquadbuilder.domain to javafx.fxml;
 }

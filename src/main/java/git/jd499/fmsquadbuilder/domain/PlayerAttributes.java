@@ -1,4 +1,4 @@
-package git.jd499.fmsquadbuilder;
+package git.jd499.fmsquadbuilder.domain;
 
 public record PlayerAttributes(
     int acc,
