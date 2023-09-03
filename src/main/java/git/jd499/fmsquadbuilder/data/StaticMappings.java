@@ -1,4 +1,4 @@
-package git.jd499.fmsquadbuilder.domain;
+package git.jd499.fmsquadbuilder.data;
 
 import java.util.HashMap;
 import java.util.List;

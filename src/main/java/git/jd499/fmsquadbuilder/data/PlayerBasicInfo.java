@@ -1,4 +1,4 @@
-package git.jd499.fmsquadbuilder.domain;
+package git.jd499.fmsquadbuilder.data;
 
 public record PlayerBasicInfo(String name, int age, String nationality, String club, String position, String secondaryPosition,
                               String mediaDescription, String personality, String height, String weight, String transferValue,

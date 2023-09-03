@@ -1,4 +1,4 @@
-package git.jd499.fmsquadbuilder.domain;
+package git.jd499.fmsquadbuilder.data;
 
 import org.apache.commons.csv.CSVRecord;
 
@@ -6,6 +6,14 @@ public class Player {
 
     private final PlayerBasicInfo basicInfo;
     private final PlayerAttributes attributes;
+    private final PlayerContractInfo contractInfo;
+
+    public Player(PlayerBasicInfo basicInfo, PlayerAttributes attributes, PlayerContractInfo contractInfo) {
+        this.basicInfo = basicInfo;
+        this.attributes = attributes;
+        this.contractInfo = contractInfo;
+    }
+
 
     public Player(CSVRecord record) {
 
@@ -79,7 +87,8 @@ public class Player {
                         Integer.parseInt(record.get("Vis")),
                         Integer.parseInt(record.get("Wor")));
 
-        PlayerContractInfo contractInfo = new PlayerContractInfo(record.get("Expires"), record.get("Salary"));
+        this.contractInfo = new PlayerContractInfo(record.get("Expires"), record.get("Salary"));
+
     }
 
     public PlayerBasicInfo getBasicInfo() {

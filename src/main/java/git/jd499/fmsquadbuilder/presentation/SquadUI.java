@@ -1,10 +1,10 @@
 package git.jd499.fmsquadbuilder.presentation;
 
 
-import static git.jd499.fmsquadbuilder.domain.Constants.*;
-import static git.jd499.fmsquadbuilder.domain.StaticMappings.DOT_TO_SimplifiedPositions;
+import static git.jd499.fmsquadbuilder.data.Constants.*;
+import static git.jd499.fmsquadbuilder.data.StaticMappings.DOT_TO_SimplifiedPositions;
 
-import git.jd499.fmsquadbuilder.data.HtmlToCsvConverter;
+import git.jd499.fmsquadbuilder.data.*;
 import git.jd499.fmsquadbuilder.domain.*;
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +44,7 @@ public class SquadUI {
     public SquadUI(PlayerService playerService, Stage primaryStage) {
         this.playerService = playerService;
         this.primaryStage = primaryStage;
+
     }
 
     public void start() {
@@ -462,10 +463,9 @@ public class SquadUI {
     protected void onFileChooserButtonClick() throws IOException {
         File selectedFile = selectFile();
         if (selectedFile != null) {
-            HtmlToCsvConverter.convertHtmlTableToCsv(selectedFile.getAbsolutePath());
-            List<Player> players = playerService.getAllPlayers();
+            Squad squad = new Squad(HtmlPlayerRepository.convertHtmlToPlayers(selectedFile.getAbsolutePath()));
             SimplifiedPositionToPlayersMap.clear();
-            for (Player player : players) {
+            for (Player player : squad.getPlayers()) {
                 String[] primaryPositions = player.getBasicInfo().position().split(",\\s*");
                 String[] secondaryPositions = player.getBasicInfo().secondaryPosition().split(",\\s*");
                 populateSimplifiedPositionToPlayersMap(primaryPositions, player);

@@ -1,6 +1,5 @@
 package git.jd499.fmsquadbuilder.data;
 
-import git.jd499.fmsquadbuilder.domain.Player;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;

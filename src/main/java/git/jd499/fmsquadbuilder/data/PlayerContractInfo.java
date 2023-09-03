@@ -1,4 +1,4 @@
-package git.jd499.fmsquadbuilder.domain;
+package git.jd499.fmsquadbuilder.data;
 
 public record PlayerContractInfo(String contractExpires, String salary) {
 }
