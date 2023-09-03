@@ -27,11 +27,11 @@ To use FM Squad Builder:
 
 - For Windows users:
   ```bash
-  run.bat
+  fm-squad-builder.bat
 
 - For macOS & Linux users:
   ```sh
-  run.sh
+  fm-squad-builder.sh
 
 ## Contributing
 
