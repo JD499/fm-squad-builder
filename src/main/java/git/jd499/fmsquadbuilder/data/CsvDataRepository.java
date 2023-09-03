@@ -13,16 +13,14 @@ import org.apache.commons.csv.CSVRecord;
 public class CsvDataRepository implements DataRepository {
     @Override
     public Optional<List<Player>> readData(String csvFile) {
-        List<Player> players = new ArrayList<>();
         try (Reader in = new FileReader(csvFile)) {
+            List<Player> players = new ArrayList<>();
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
             for (CSVRecord record : records) {
-                Player player = new Player(record);  // Assuming Player has a constructor that accepts CSVRecord
-                players.add(player);
+                players.add(new Player(record));
             }
             return Optional.of(players);
         } catch (IOException e) {
-            e.printStackTrace();
             return Optional.empty();
         }
     }

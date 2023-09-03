@@ -9,23 +9,19 @@ import java.util.Map;
 public class PlayerService {
     private final CsvDataRepository csvDataRepository;
 
-    // Change this constructor to public
     public PlayerService(CsvDataRepository csvDataRepository) {
         this.csvDataRepository = csvDataRepository;
     }
 
     public List<Player> getAllPlayers() {
-        return csvDataRepository.readData("src/main/resources/Squad.csv").orElse(null);
+        return csvDataRepository.readData(Constants.SQUAD_CSV_FILE_PATH).orElse(null);
     }
 
     public double calculateAbility(Player player, PlayerRole role) {
-        double ability = 0;
-        Map<String, Double> weights = ROLE_WEIGHTS.get(role);
-        for (String attribute : weights.keySet()) {
-            ability += player.getAttributes().getAttribute(attribute) * weights.get(attribute);
-        }
-        return ability;
+        return ROLE_WEIGHTS.getOrDefault(role, Map.of())
+                .entrySet()
+                .stream()
+                .mapToDouble(entry -> player.getAttributes().getAttribute(entry.getKey()) * entry.getValue())
+                .sum();
     }
-
-    // Business logic for player-related operations
 }
