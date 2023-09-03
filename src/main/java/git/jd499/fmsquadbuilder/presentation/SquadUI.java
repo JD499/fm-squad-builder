@@ -338,6 +338,9 @@ public class SquadUI {
                     .layoutXProperty()
                     .bind(container.widthProperty().subtract(comboBox.widthProperty()).divide(2));
 
+            comboBox.maxWidthProperty().bind(container.widthProperty());
+            comboBox.maxHeightProperty().bind(container.heightProperty());
+
             comboBox.setOnAction(
                     event -> {
                         if (comboBox.getValue() != null) {
