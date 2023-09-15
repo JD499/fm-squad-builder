@@ -17,9 +17,19 @@ Before you begin, ensure you have met the following requirements:
 
 ## Installation & Setup
 
-1. Download the latest release from the [Releases](https://github.com/JD499/fm-squad-builder/releases) page.
-2. Extract the `.zip` archive to your desired location.
-3. Navigate to the `bin` directory.
+1. **Download the Release**:
+   - Navigate to the [Releases](https://github.com/JD499/fm-squad-builder/releases) page of this repository.
+   - Download the latest release which will include the application binaries (`bin`), libraries (`lib`), and the `fm squad builder view.fmf`.
+  
+2. **Installing the FM Squad Builder View**:
+   - From the downloaded release, locate the `fm squad builder view.fmf` file.
+   - Copy the `fm squad builder view.fmf` file.
+   - Navigate to `Sports Interactive\Football Manager 2023\views` on your computer. This is typically located in your Documents or My Documents folder.
+   - Paste the `fm squad builder view.fmf` file into the `views` directory.
+
+3. **Install the Application**:
+   - Extract the downloaded release to your desired location.
+   - Navigate to the `bin` directory and run the application executable.
 
 ## Usage
 
